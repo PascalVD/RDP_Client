@@ -15,7 +15,7 @@ checklists d'assemblage. Rien d'inventé : chaque pièce est utilisable.
 ## 📁 Contenu
 | Dossier | Contenu |
 |---------|---------|
-| `Verse/` | 7 scripts Verse (GameManager, RobberyZone, PrisonManager, WantedLevelManager, LootDepositManager, TeamSetup, HUDManager) |
+| `Verse/` | 9 scripts Verse (GameManager, RobberyZone, PrisonManager, WantedLevelManager, LootDepositManager, TeamSetup, HUDManager, **ConvoyManager** mobile, **ArrestManager** élimination+menottage) |
 | `Blockout_3D/` | `generate_blockout.py` (Blender) → FBX/GLB de toute la ville |
 | `Devices/` | Liste complète (~70 devices) : noms, positions, params, scripts liés |
 | `Docs/` | README FR, plan de placement, boucle de jeu, équilibrage, wanted level, convoi, checklist de publication |

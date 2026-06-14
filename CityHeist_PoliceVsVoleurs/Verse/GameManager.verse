@@ -39,6 +39,15 @@ city_heist_game_manager := class(creative_device):
     @editable
     LootDeposit : city_heist_loot_deposit_manager = city_heist_loot_deposit_manager{}
 
+    # Sous-systemes optionnels (version complete). Laissez vides au MVP :
+    # le GameManager bascule alors sur sa logique de convoi interne.
+    @editable
+    Convoy : city_heist_convoy_manager = city_heist_convoy_manager{}
+    @editable
+    Arrest : city_heist_arrest_manager = city_heist_arrest_manager{}
+    @editable
+    var UseConvoyManager : logic = true   # true = convoi mobile (ConvoyManager)
+
     # Les 3 zones de braquage.
     @editable
     BankZone : city_heist_robbery_zone = city_heist_robbery_zone{}
@@ -81,6 +90,9 @@ city_heist_game_manager := class(creative_device):
         Prison.AgentReleased.Subscribe(OnRelease)
         # Quand le porteur est arrete, il perd son butin.
         Prison.AgentArrested.Subscribe(LootDeposit.RemoveCarriedLoot)
+        # Resultat du convoi mobile (si ConvoyManager utilise).
+        if (UseConvoyManager?):
+            Convoy.Resolved.Subscribe(OnConvoyResolved)
 
     # --- Boucle de manche -------------------------------------------
     RunRound()<suspends> : void =
@@ -110,6 +122,11 @@ city_heist_game_manager := class(creative_device):
 
     # --- Evenement convoi final -------------------------------------
     TriggerConvoyEvent()<suspends> : void =
+        # Version complete : delegue au ConvoyManager mobile.
+        if (UseConvoyManager?):
+            Convoy.StartConvoy()
+            return
+        # Version interne (fallback MVP) : convoi statique a une zone.
         if (not ConvoyResolved?):
             ConvoyAudio.Play()
             HUD.ShowToAll(HUD.MsgConvoy)
@@ -148,6 +165,14 @@ city_heist_game_manager := class(creative_device):
                     return true
             else if (PoliceIn > 0):
                 set VoleursHoldSeconds = Max(0.0, VoleursHoldSeconds - 0.5)
+
+    # Resultat du convoi mobile (ConvoyManager).
+    OnConvoyResolved(VoleursWin : logic) : void =
+        set ConvoyResolved = true
+        if (VoleursWin?):
+            AwardVoleurs(5)
+        else:
+            AwardPolice(5)
 
     # --- Score -------------------------------------------------------
     OnLootDeposited(Data : tuple(agent, int)) : void =

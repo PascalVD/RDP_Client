@@ -16,14 +16,16 @@ pour assembler la map vous-même en quelques heures :
 ## Structure du projet
 ```
 CityHeist_PoliceVsVoleurs/
-├── Verse/                 # 7 scripts Verse (logique du mode)
+├── Verse/                 # 9 scripts Verse (logique du mode)
 │   ├── GameManager.verse
 │   ├── RobberyZone.verse
 │   ├── PrisonManager.verse
 │   ├── WantedLevelManager.verse
 │   ├── LootDepositManager.verse
 │   ├── TeamSetup.verse
-│   └── HUDManager.verse
+│   ├── HUDManager.verse
+│   ├── ConvoyManager.verse      # convoi mobile (waypoints)
+│   └── ArrestManager.verse      # élimination + menottage
 ├── Docs/                  # documentation (ce dossier)
 │   ├── README_FR.md
 │   ├── Placement_Plan.md
@@ -31,6 +33,7 @@ CityHeist_PoliceVsVoleurs/
 │   ├── Balancing.md
 │   ├── WantedLevel.md
 │   ├── FinalEvent_Convoy.md
+│   ├── Arrest_System.md
 │   └── Publishing_Checklist.md
 ├── Blockout_3D/           # génération 3D
 │   ├── generate_blockout.py

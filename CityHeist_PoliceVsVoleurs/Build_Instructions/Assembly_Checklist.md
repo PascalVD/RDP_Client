@@ -79,9 +79,20 @@ But : une boucle complète **Banque → fuite → arrestation/prison → dépôt
 - [ ] Quartier résidentiel (4 maisons instanciées) + supérette + station.
 - [ ] Barrages police `Mutator_StunZone` / barricades aux points de contrôle.
 
-### Convoi final
-- [ ] `Convoy_Vehicle`, `Convoy_CaptureArea`, `Convoy_Audio` branchés au GameManager.
-- [ ] Vérifier déclenchement à T-3 min et résolution Police/Voleurs.
+### Arrestation avancée (ArrestManager)
+- [ ] Placer `city_heist_arrest_manager` → brancher Prison, TeamSetup, HUD.
+- [ ] Mode menottage : `Cuff_Zone_*`, `Cuff_SlowMutator`, `Cuff_Audio` branchés.
+- [ ] Régler `UseEliminationMode` / `UseCuffMode` (cf. `Docs/Arrest_System.md`).
+- [ ] Brancher `Arrest` dans le GameManager.
+
+### Convoi final mobile (ConvoyManager)
+- [ ] Placer `city_heist_convoy_manager` → brancher HUD, Wanted, TeamSetup.
+- [ ] Placer 3–6 `Convoy_Waypoint_*` (Capture Area) **dans l'ordre** du trajet
+      → liste `Waypoints`. Brancher `Convoy_Vehicle`, `Convoy_Audio`, `Convoy_Progress`.
+- [ ] (Option B) Remplir `Convoy_WaypointTP_*` ; (Option A) animer via Cinematic Sequence.
+- [ ] Brancher `Convoy` dans le GameManager + `UseConvoyManager = true`.
+- [ ] Vérifier déclenchement à T-3 min et résolution Police/Voleurs (+5).
+- [ ] (Fallback MVP) `Convoy_CaptureArea` + `UseConvoyManager = false` si convoi statique.
 
 ### Ambiance nuit
 - [ ] Lumières bleues (police), orange (voleurs), néons (casino/bijouterie).

@@ -110,9 +110,23 @@ Légende colonne « Script » : indique le device Verse qui pilote/lit ce device
 | `Round_Timer` | Timer | HUD | 600–900s, affiché | GameManager |
 | `EndGame` | End Game | global | Déclenché par Verse | GameManager |
 | `Score_Police` | Score Manager | global | Team 0 | GameManager |
-| `Convoy_Vehicle` | Vehicle Spawner (Armored Battle Bus) | route principale (20, 0, 1) | Spawn via Verse à T-3min | GameManager |
-| `Convoy_CaptureArea` | Capture Area | autour du convoi | Suit le trajet (statique simplifié) | GameManager |
-| `Convoy_Audio` | Audio Player | global | Annonce convoi | GameManager |
+| `Convoy_Vehicle` | Vehicle Spawner (Armored Battle Bus) | route principale (20, 0, 1) | Spawn via Verse à T-3min | GameManager / ConvoyManager |
+| `Convoy_CaptureArea` | Capture Area | autour du convoi | Convoi **statique** (fallback MVP) | GameManager |
+| `Convoy_Audio` | Audio Player | global | Annonce convoi | GameManager / ConvoyManager |
+
+### Convoi MOBILE (ConvoyManager — version complète)
+| Nom exact | Device | Position | Paramètres | Script |
+|-----------|--------|----------|------------|--------|
+| `Convoy_Waypoint_1..n` | Capture Area | le long du trajet (ordre) | Segments disputés, listés dans `Waypoints` | ConvoyManager |
+| `Convoy_WaypointTP_1..n` | Teleporter | à chaque waypoint | Option B : déplace le convoi par étapes | ConvoyManager |
+| `Convoy_Progress` | Tracker | HUD | Max = nb de segments | ConvoyManager |
+
+### Arrestation (ArrestManager — mode menottage)
+| Nom exact | Device | Position | Paramètres | Script |
+|-----------|--------|----------|------------|--------|
+| `Cuff_Zone_1..n` | Capture Area | sorties braquage / barrages | Zones de menottage (`CuffZones`) | ArrestManager |
+| `Cuff_SlowMutator` | Mutator Zone | sur les zones de menottage | Ralentit les voleurs présents | ArrestManager |
+| `Cuff_Audio` | Audio Player | global | Son de menottage | ArrestManager |
 
 ## 10. Véhicules & mobilité
 
@@ -126,7 +140,12 @@ Légende colonne « Script » : indique le device Verse qui pilote/lit ce device
 ---
 
 ### Récapitulatif des branchements Verse (à faire dans l'onglet Details)
-- `city_heist_game_manager` : brancher **tous** les managers + Round_Timer, EndGame, Score_Police, Convoy_*.
+- `city_heist_game_manager` : brancher **tous** les managers (dont `Convoy` et
+  `Arrest`) + Round_Timer, EndGame, Score_Police, Convoy_*.
+- `city_heist_convoy_manager` : `Waypoints` (ordre du trajet) + HUD/Wanted/TeamSetup
+  (+ `WaypointTeleporters` si option B). Émet `Resolved` vers le GameManager.
+- `city_heist_arrest_manager` : Prison + TeamSetup + HUD ; `CuffZones`/`SlowMutator`
+  pour le menottage. Appelle `Prison.ArrestAgent`.
 - Chaque `city_heist_robbery_zone` : brancher ses 6 devices + HUD + Wanted + TeamSetup.
 - `city_heist_prison_manager`, `..._loot_deposit_manager`, `..._wanted_manager`, `..._hud_manager`, `..._team_setup` : voir leurs `@editable` respectifs.
 

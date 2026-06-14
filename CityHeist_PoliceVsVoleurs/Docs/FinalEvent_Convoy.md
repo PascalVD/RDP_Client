@@ -1,6 +1,16 @@
 # Événement final — Le Convoi blindé — CITY HEIST
 
-Géré dans `GameManager.verse` (`TriggerConvoyEvent` / `ResolveConvoy`).
+Deux implémentations fournies :
+- **Convoi MOBILE (recommandé)** : `Verse/ConvoyManager.verse`. Le convoi
+  progresse le long d'une série de **waypoints** (Capture Areas successives) ;
+  chaque segment est disputé. Activé par défaut (`UseConvoyManager = true`
+  dans le GameManager).
+- **Convoi statique (fallback MVP)** : logique interne du `GameManager.verse`
+  (`TriggerConvoyEvent` / `ResolveConvoy`), une seule zone. Utilisé si
+  `UseConvoyManager = false` ou si le ConvoyManager n'est pas branché.
+
+Dans les deux cas, le GameManager attribue **+5** au vainqueur via
+`OnConvoyResolved`.
 
 ## Déclenchement
 - À **T-3:00** de la fin de manche (`ConvoyTriggerSecondsBeforeEnd = 180`).
@@ -21,13 +31,25 @@ Une **Capture Area** (`Convoy_CaptureArea`) entoure le convoi.
 - Sinon (temps écoulé / police garde le contrôle) → **+5 points Police**
   (« convoi escorté »).
 
-## Variantes possibles (selon ambition)
-1. **Convoi mobile réel** : faites suivre un trajet au véhicule via une
-   séquence de Teleporters/Trigger ou un *Patrol Path* ; déplacez la Capture
-   Area par étapes (plusieurs zones successives activées le long du parcours).
-2. **Coffre du convoi** : remplacez la Capture Area par une `RobberyZone`
-   supplémentaire montée sur le point d'arrivée du convoi (butin +5).
-3. **Multi-vagues** : à 16 joueurs, faites spawn 2 convois espacés de 60 s.
+## Convoi mobile — comment le câbler (ConvoyManager)
+1. Placez 3 à 6 **Capture Areas** le long du trajet (du point de départ au
+   point d'arrivée) et listez-les **dans l'ordre** dans `Waypoints`.
+2. Mouvement physique du mesh/véhicule, deux options :
+   - **A) Cinematic Sequence / Prop Mover** : animez le convoi le long du
+     trajet ; le script ne fait que la logique (recommandé pour un rendu
+     fluide). Branchez vos séquences sur l'avancée de segment.
+   - **B) Teleport par étapes** : remplissez `WaypointTeleporters` (même
+     longueur que `Waypoints`) ; le convoi est téléporté de segment en segment.
+3. Réglez `SecondsPerSegment` (temps police pour valider un segment) et
+   `VoleursHoldToLoot` (tenue voleurs cumulée pour piller).
+
+**Règle :** à chaque segment, si la police domine elle valide le segment et le
+convoi avance ; si les voleurs tiennent assez longtemps **à un** segment, ils
+pillent le convoi. Convoi arrivé au dernier waypoint = escorte réussie (police).
+
+## Autres variantes possibles
+- **Coffre du convoi** : montez une `RobberyZone` sur le point d'arrivée.
+- **Multi-vagues** : à 16 joueurs, 2 convois espacés de 60 s.
 
 ## Devices nécessaires
 | Device | Rôle |
