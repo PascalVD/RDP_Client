@@ -1,0 +1,18 @@
+{
+  "//": "CITY HEIST - Exemple de config MCP pour Claude Desktop.",
+  "//1": "Copier le contenu utile dans claude_desktop_config.json (voir Claude_Desktop_Setup.md pour l'emplacement).",
+  "//2": "Remplacer <VALEUR_UEFN> par la commande/URL affichee par UEFN (Project Settings > Beta Access > UEFN MCP Toolset).",
+  "//3": "Garder UN SEUL bloc 'uefn' (stdio OU remote), pas les deux. Redemarrer Claude Desktop apres modification.",
+  "mcpServers": {
+    "uefn": {
+      "//": "CAS 1 - serveur MCP local en stdio (commande + arguments).",
+      "command": "<CHEMIN_DE_LA_COMMANDE_UEFN>",
+      "args": ["<arg1>", "<arg2>"]
+    },
+    "uefn_remote_exemple": {
+      "//": "CAS 2 - serveur MCP expose en URL (http/sse). Renommer en 'uefn' et supprimer le bloc ci-dessus si c'est ton cas.",
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "<URL_UEFN>"]
+    }
+  }
+}
